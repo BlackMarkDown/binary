@@ -13,30 +13,32 @@
   import Socket from '../Socket';
   import PacketName from '../../PacketName';
   import Router from '../Router';
+  import GameStatus from '../GameStatus';
 
-  const MainMenu = {
+  export default {
     name: 'main-menu',
-    data: {
+    data: () => ({
       isWaiting: false,
-    },
+    }),
     methods: {
-      gameStart: () => {
-        if (MainMenu.data.isWaiting) {
+      gameStart: function gameStart() {
+        if (this.isWaiting) {
           return;
         }
-        MainMenu.data.isWaiting = true;
+        this.isWaiting = true;
         Socket.emit(PacketName.READY);
-        return;
       },
     },
+    beforeCreate: function beforeCreate() {
+      Socket.on(PacketName.START, ({ isMyTurn }) => {
+        console.log(isMyTurn);
+        GameStatus.isMyTurn = isMyTurn;
+        console.log(GameStatus);
+        Router.push('/play');
+        this.isWaiting = false;
+      });
+    },
   };
-
-  Socket.on(PacketName.START, () => {
-    Router.push('/play');
-    MainMenu.data.isWaiting = false;
-  });
-
-  export default MainMenu;
 </script>
 
 <style scoped>
