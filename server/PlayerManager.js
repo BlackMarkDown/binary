@@ -1,11 +1,19 @@
-const players = [];
+class PlayerManager {
+  constructor() {
+    this.players = [];
+  }
 
-module.exports = {
-  addPlayer: player => players.push(player),
-  removePlayer: (player) => {
-    const index = players.indexOf(player);
+  addPlayer(player) {
+    this.players.push(player);
+  }
+
+  removePlayer(player) {
+    const index = this.players.indexOf(player);
     if (index > -1) {
-      players.splice(index, 1);
+      this.players.splice(index, 1);
     }
-  },
-};
+  }
+}
+const playerManager = new PlayerManager();
+
+exports = module.exports = playerManager;

@@ -1,16 +1,19 @@
-const Game = require('./Game');
+class GameManager {
+  constructor() {
+    this.games = [];
+  }
 
-const games = [];
+  newGame(game) {
+    this.games.push(game);
+  }
 
-module.exportrs = {
-  newGame: (players) => {
-    const game = new Game(players);
-    games.push(game);
-  },
-  endGame: (game) => {
-    const index = games.indexOf(game);
+  endGame(game) {
+    const index = this.games.indexOf(game);
     if (index > -1) {
-      games.splice(index, 1);
+      this.games.splice(index, 1);
     }
-  },
-};
+  }
+}
+
+const gameManager = new GameManager();
+exports = module.exports = gameManager;

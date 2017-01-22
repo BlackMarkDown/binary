@@ -20,7 +20,7 @@ class Game {
   }
 
   onEndTurn(player, oneOrZero) {
-    const isInvalidValue = oneOrZero !== 1 || oneOrZero !== 0;
+    const isInvalidValue = oneOrZero !== 1 && oneOrZero !== 0;
     const isInvalidPlayer = !this.isMyTurn(player) || this.players.indexOf(player) < 0;
 
     if (isInvalidValue || isInvalidPlayer) {
@@ -32,20 +32,20 @@ class Game {
 
     if (isWrongValue) {
       // TODO what if the players are greater than 2?
-      return this.endGame(oneOrZero);
+      return this.endGame(this.currentTurnPlayer, oneOrZero);
     }
 
-    return this.endTurn(oneOrZero);
+    return this.endTurn(player, oneOrZero);
   }
 
   isMyTurn(player) {
     return this.currentTurnPlayer === player;
   }
 
-  endGame(oneOrZero) {
+  endGame(loser, oneOrZero) {
     this.players.forEach(player =>
       player.endGame({
-        isWinner: this.currentTurnPlayer !== player,
+        isWinner: loser !== player,
         oneOrZero,
       }));
 
@@ -66,6 +66,10 @@ class Game {
     const nextTurnPlayerIndex = (currentTurnPlayerIndex + 1) % this.players.length;
     this.currentTurnPlayer = this.players[nextTurnPlayerIndex];
   }
+
+  onDisconnect(player) {
+    this.endGame(player);
+  }
 }
 
-module.exports = Game;
+exports = module.exports = Game;
