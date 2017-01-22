@@ -1,11 +1,16 @@
 const GameManager = require('./GameManager');
 const bigInt = require('big-integer');
 
+const FIRST_COUNTDOWN = 3000;
+const COUNTDOWN_DURATION = 3000;
+
 class Game {
   constructor(players) {
     this.players = players;
     this.currentBigNumber = bigInt(0);
     this.currentNumberIndex = 0;
+    this.onCountdown = this.onCountdown.bind(this);
+
     this.setFirstTurnPlayer();
     this.startGame();
   }
@@ -16,10 +21,26 @@ class Game {
   }
 
   startGame() {
+    this.isFirstCountdown = true;
+    this.firstTimer = setTimeout(() => {
+      this.isFirstCountdown = false;
+      this.resetTimer();
+    }, FIRST_COUNTDOWN);
     this.players.forEach(player =>
       player.startGame(this, {
         isMyTurn: this.isMyTurn(player),
       }));
+  }
+
+  resetTimer() {
+    if (this.timer) {
+      clearTimeout(this.timer);
+    }
+    this.timer = setTimeout(this.onCountdown, COUNTDOWN_DURATION);
+  }
+
+  onCountdown() {
+    this.endGame(this.currentTurnPlayer);
   }
 
   getCurrentTurnAnswer() {
@@ -42,9 +63,8 @@ class Game {
     const isInvalidValue = oneOrZero !== 1 && oneOrZero !== 0;
     const isInvalidPlayer = !this.isMyTurn(player) || this.players.indexOf(player) < 0;
 
-    if (isInvalidValue || isInvalidPlayer) {
-      // TODO reject
-      return this.endGame(player, 0);
+    if (isInvalidValue || isInvalidPlayer || this.isFirstCountdown) {
+      return this.endGame(player);
     }
     console.log(this.getCurrentTurnAnswer());
     const isWrongValue = this.getCurrentTurnAnswer() !== oneOrZero;
@@ -67,7 +87,8 @@ class Game {
         isWinner: loser !== player,
         oneOrZero,
       }));
-
+    clearTimeout(this.firstTimer);
+    clearTimeout(this.timer);
     GameManager.endGame(this);
   }
 
@@ -79,6 +100,7 @@ class Game {
         oneOrZero,
       }));
     this.shiftAnswer();
+    this.resetTimer();
   }
 
   turnPlayer() {

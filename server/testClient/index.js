@@ -27,7 +27,7 @@ socket.on(PacketName.END_TURN, ({ isMyTurn, oneOrZero }) => {
       socket.emit(PacketName.END_TURN, {
         oneOrZero: 1,
       });
-    }, 500);
+    }, 2000);
   }
 });
 
@@ -39,6 +39,7 @@ socket.on(PacketName.END_GAME, ({ isWinner, oneOrZero }) => {
   } else {
     console.log(`I lose...`);
   }
+  socket.emit(PacketName.READY);
 });
 
 socket.on('disconnect', () => {

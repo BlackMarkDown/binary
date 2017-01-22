@@ -16,10 +16,9 @@ class Player {
     });
 
     this.on(PacketName.END_TURN, ({ oneOrZero }) => {
-      if (!this.game) {
-        throw new Error('End turn called though player is not in game');
+      if (this.game) {
+        this.game.onEndTurn(this, oneOrZero);
       }
-      return this.game.onEndTurn(this, oneOrZero);
     });
 
     this.on('disconnect', () => {
