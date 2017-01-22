@@ -11,7 +11,7 @@
 
 <script>
   export default {
-    name: 'main-menu'
+    name: 'main-menu',
   };
 </script>
 

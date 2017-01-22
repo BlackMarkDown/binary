@@ -19,8 +19,8 @@
       Counter,
       CounterBar,
       OpponentButtons,
-      MyButtons
-    }
+      MyButtons,
+    },
   };
 </script>
 

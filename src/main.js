@@ -9,16 +9,16 @@ Vue.use(VueRouter);
 
 const routes = [
   { path: '/', component: MainMenu },
-  { path: '/play', component: Play }
+  { path: '/play', component: Play },
 ];
 
 const router = new VueRouter({
   mode: 'history',
-  routes
+  routes,
 });
 
 const app = new Vue({
-  router
+  router,
 });
 
 app.$mount('#app');

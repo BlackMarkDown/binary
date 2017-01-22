@@ -7,7 +7,7 @@
 
 <script>
   export default {
-    name: 'opponent-buttons'
+    name: 'opponent-buttons',
   };
 </script>
 
