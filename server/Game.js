@@ -1,8 +1,11 @@
 const GameManager = require('./GameManager');
+const bigInt = require('big-integer');
 
 class Game {
   constructor(players) {
     this.players = players;
+    this.currentBigNumber = bigInt(0);
+    this.currentNumberIndex = 0;
     this.setFirstTurnPlayer();
     this.startGame();
   }
@@ -19,6 +22,22 @@ class Game {
       }));
   }
 
+  getCurrentTurnAnswer() {
+    const string = this.currentBigNumber.toString(2);
+    const char = string.charAt(this.currentNumberIndex);
+    return parseInt(char, 10);
+  }
+
+  shiftAnswer() {
+    console.log(this.currentBigNumber.toString(2), this.currentBigNumber.toString(2).length, this.currentNumberIndex);
+    if (this.currentNumberIndex + 1 >= this.currentBigNumber.toString(2).length) {
+      this.currentBigNumber = this.currentBigNumber.add(1);
+      this.currentNumberIndex = 0;
+      return;
+    }
+    this.currentNumberIndex += 1;
+  }
+
   onEndTurn(player, oneOrZero) {
     const isInvalidValue = oneOrZero !== 1 && oneOrZero !== 0;
     const isInvalidPlayer = !this.isMyTurn(player) || this.players.indexOf(player) < 0;
@@ -27,8 +46,8 @@ class Game {
       // TODO reject
       return this.endGame(player, 0);
     }
-
-    const isWrongValue = false;
+    console.log(this.getCurrentTurnAnswer());
+    const isWrongValue = this.getCurrentTurnAnswer() !== oneOrZero;
 
     if (isWrongValue) {
       // TODO what if the players are greater than 2?
@@ -59,6 +78,7 @@ class Game {
         isMyTurn: this.currentTurnPlayer === player,
         oneOrZero,
       }));
+    this.shiftAnswer();
   }
 
   turnPlayer() {

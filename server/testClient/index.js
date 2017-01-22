@@ -21,8 +21,8 @@ socket.on(PacketName.START, ({ isMyTurn }) => {
 
 socket.on(PacketName.END_TURN, ({ isMyTurn, oneOrZero }) => {
   console.log('END_TURN');
-  console.log(`opposite said ${oneOrZero}`);
   if (isMyTurn) {
+    console.log(`Opposite said ${oneOrZero}`);
     setTimeout(() => {
       socket.emit(PacketName.END_TURN, {
         oneOrZero: 1,
@@ -34,6 +34,7 @@ socket.on(PacketName.END_TURN, ({ isMyTurn, oneOrZero }) => {
 socket.on(PacketName.END_GAME, ({ isWinner, oneOrZero }) => {
   console.log('END_GAME');
   if (isWinner) {
+    console.log(`Opposite said ${oneOrZero}`);
     console.log(`I win!`);
   } else {
     console.log(`I lose...`);
