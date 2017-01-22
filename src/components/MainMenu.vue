@@ -4,15 +4,39 @@
       <h1>binary</h1>
     </div>
     <div id="menu">
-      <router-link to="/play">게임 시작</router-link>
+      <button v-on:click="gameStart">게임 시작</button>
     </div>
   </div>
 </template>
 
 <script>
-  export default {
+  import Socket from '../Socket';
+  import PacketName from '../../PacketName';
+  import Router from '../Router';
+
+  const MainMenu = {
     name: 'main-menu',
+    data: {
+      isWaiting: false,
+    },
+    methods: {
+      gameStart: () => {
+        if (MainMenu.data.isWaiting) {
+          return;
+        }
+        MainMenu.data.isWaiting = true;
+        Socket.emit(PacketName.READY);
+        return;
+      },
+    },
   };
+
+  Socket.on(PacketName.START, () => {
+    Router.push('/play');
+    MainMenu.data.isWaiting = false;
+  });
+
+  export default MainMenu;
 </script>
 
 <style scoped>
