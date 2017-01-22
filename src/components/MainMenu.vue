@@ -4,7 +4,7 @@
       <h1>binary</h1>
     </div>
     <div id="menu">
-      <button type="button">게임시작</button>
+      <router-link to="/play">게임 시작</router-link>
     </div>
   </div>
 </template>
