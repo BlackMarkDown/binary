@@ -1,8 +1,8 @@
 const GameManager = require('./GameManager');
 const bigInt = require('big-integer');
 
-const FIRST_COUNTDOWN = 3000;
-const COUNTDOWN_DURATION = 3000;
+const FIRST_COUNTDOWN = 0;
+const COUNTDOWN_DURATION = 300000;
 
 class Game {
   constructor(players) {
